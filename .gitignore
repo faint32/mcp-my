@@ -85,3 +85,5 @@ app/replay_*.log
 .dbip-cache/
 
 privacy-benchmark/.cache/
+
+soft/
