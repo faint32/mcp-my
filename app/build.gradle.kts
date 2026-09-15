@@ -217,7 +217,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.danielealbano.androidremotecontrolmcp"
+        applicationId = "com.my.androidremotecontrolmcp"
         minSdk = 30
         targetSdk = 34
         versionCode = versionCodeProp
@@ -478,7 +478,7 @@ androidComponents {
     // the release applicationId stays identical across flavors (`com.danielealbano.androidremotecontrolmcp`).
     onVariants(selector().withBuildType("debug")) { variant ->
         variant.applicationId.set(
-            "com.danielealbano.androidremotecontrolmcp.${variant.flavorName}.debug",
+            "com.my.androidremotecontrolmcp.${variant.flavorName}.debug",
         )
     }
     onVariants { variant ->
