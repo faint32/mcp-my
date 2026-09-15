@@ -87,3 +87,5 @@ app/replay_*.log
 privacy-benchmark/.cache/
 
 soft/
+keystore.properties
+release.jks
