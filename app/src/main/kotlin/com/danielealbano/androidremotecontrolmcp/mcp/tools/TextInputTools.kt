@@ -2,6 +2,7 @@
 
 package com.danielealbano.androidremotecontrolmcp.mcp.tools
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -378,6 +379,65 @@ internal fun readFieldContent(typeInputController: TypeInputController): String 
     return surroundingText.text.toString()
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// API-version fork: native InputConnection typing (API 33+) vs legacy fallback
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * True when the device supports AccessibilityService.InputMethod /
+ * getCurrentInputConnection() — i.e. API 33+ (Android 13). When false (e.g. Android 11 /
+ * API 30), onCreateInputMethod() is never called, inputMethodInstance stays null, and the
+ * type tools must fall back to legacy ACTION_SET_TEXT (see [fallbackTransformFocusedText]).
+ */
+internal fun isInputConnectionTypingSupported(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
+/**
+ * Legacy fallback used on API < 33 where InputConnection typing is unavailable.
+ *
+ * Reads the currently input-focused editable node's text, applies [transform] to compute the
+ * new field content, and writes it back atomically via a single ACTION_SET_TEXT on the same
+ * node handle. This is the same pipeline [PressKeyTool] uses for DEL/TAB/SPACE and works on all
+ * supported API levels. Because ACTION_SET_TEXT replaces the entire field, all four type tools
+ * are expressed as read-modify-write over the whole string.
+ *
+ * The caller must have already focused the target node (the type tools click node_id first).
+ *
+ * @param transform receives the current field text and returns the desired new text; it may
+ *   throw [McpToolException] (e.g. NodeNotFound when a search term is absent) to fail the tool.
+ * @return the new field content that was written (for the verification response).
+ * @throws McpToolException.ActionFailed if no focused editable node exists or the write fails.
+ */
+internal fun fallbackTransformFocusedText(
+    accessibilityServiceProvider: AccessibilityServiceProvider,
+    transform: (String) -> String,
+): String {
+    val node =
+        findFocusedEditableNode(accessibilityServiceProvider)
+            ?: throw McpToolException.ActionFailed(
+                "No focused editable text field available for text input (legacy fallback).",
+            )
+    try {
+        val current = node.text?.toString() ?: ""
+        val newText = transform(current)
+        val arguments =
+            Bundle().apply {
+                putCharSequence(
+                    AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
+                    newText,
+                )
+            }
+        if (!node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments)) {
+            throw McpToolException.ActionFailed(
+                "ACTION_SET_TEXT failed on focused node (legacy fallback).",
+            )
+        }
+        return newText
+    } finally {
+        @Suppress("DEPRECATION")
+        node.recycle()
+    }
+}
+
 class TypeAppendTextTool
     @Inject
     constructor(
@@ -412,35 +472,40 @@ class TypeAppendTextTool
                     val clickResult = actionExecutor.clickNode(nodeId, result.windows)
                     clickResult.onFailure { e -> mapNodeActionException(e, nodeId) }
 
-                    // Poll-retry for InputConnection readiness (max 500ms, 50ms interval)
-                    awaitInputConnectionReady(typeInputController, nodeId)
+                    if (isInputConnectionTypingSupported()) {
+                        // Poll-retry for InputConnection readiness (max 500ms, 50ms interval)
+                        awaitInputConnectionReady(typeInputController, nodeId)
 
-                    // Position cursor at end
-                    // Note: offset + text.length gives the total text length only if
-                    // getSurroundingText returns the complete field content. For fields
-                    // with >2*MAX_SURROUNDING_TEXT_LENGTH chars, this may undercount.
-                    // Given the 2000-char tool limit, this is not a practical concern.
-                    val surroundingText =
-                        typeInputController.getSurroundingText(
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            0,
-                        )
-                    val textLength =
-                        surroundingText?.let {
-                            it.offset + it.text.length
-                        } ?: 0
-                    if (!typeInputController.setSelection(textLength, textLength)) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to position cursor in node '$nodeId' — input connection lost",
-                        )
+                        // Position cursor at end
+                        // Note: offset + text.length gives the total text length only if
+                        // getSurroundingText returns the complete field content. For fields
+                        // with >2*MAX_SURROUNDING_TEXT_LENGTH chars, this may undercount.
+                        // Given the 2000-char tool limit, this is not a practical concern.
+                        val surroundingText =
+                            typeInputController.getSurroundingText(
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                0,
+                            )
+                        val textLength =
+                            surroundingText?.let {
+                                it.offset + it.text.length
+                            } ?: 0
+                        if (!typeInputController.setSelection(textLength, textLength)) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to position cursor in node '$nodeId' — input connection lost",
+                            )
+                        }
+
+                        // Type code point by code point
+                        typeCharByChar(text, typingSpeed, typingSpeedVariance, typeInputController)
+
+                        // Read field content after operation for verification
+                        readFieldContent(typeInputController)
+                    } else {
+                        // Legacy fallback (API < 33): append via ACTION_SET_TEXT read-modify-write.
+                        fallbackTransformFocusedText(accessibilityServiceProvider) { current -> current + text }
                     }
-
-                    // Type code point by code point
-                    typeCharByChar(text, typingSpeed, typingSpeedVariance, typeInputController)
-
-                    // Read field content after operation for verification
-                    readFieldContent(typeInputController)
                 }
 
             Log.d(TAG, "type_append_text: typed ${text.length} chars on node '$nodeId'")
@@ -551,40 +616,53 @@ class TypeInsertTextTool
                     val clickResult = actionExecutor.clickNode(nodeId, result.windows)
                     clickResult.onFailure { e -> mapNodeActionException(e, nodeId) }
 
-                    // Poll-retry for InputConnection readiness
-                    awaitInputConnectionReady(typeInputController, nodeId)
+                    if (isInputConnectionTypingSupported()) {
+                        // Poll-retry for InputConnection readiness
+                        awaitInputConnectionReady(typeInputController, nodeId)
 
-                    // Validate offset against current text length
-                    val surroundingText =
-                        typeInputController.getSurroundingText(
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            0,
-                        )
-                    val textLength =
-                        surroundingText?.let {
-                            it.offset + it.text.length
-                        } ?: 0
+                        // Validate offset against current text length
+                        val surroundingText =
+                            typeInputController.getSurroundingText(
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                0,
+                            )
+                        val textLength =
+                            surroundingText?.let {
+                                it.offset + it.text.length
+                            } ?: 0
 
-                    if (offset > textLength) {
-                        throw McpToolException.InvalidParams(
-                            "offset ($offset) exceeds text length ($textLength) in node '$nodeId'",
-                        )
+                        if (offset > textLength) {
+                            throw McpToolException.InvalidParams(
+                                "offset ($offset) exceeds text length ($textLength) in node '$nodeId'",
+                            )
+                        }
+
+                        // Position cursor at offset — check return value
+                        if (!typeInputController.setSelection(offset, offset)) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to position cursor at offset $offset " +
+                                    "in node '$nodeId' — input connection lost",
+                            )
+                        }
+
+                        // Type code point by code point
+                        typeCharByChar(text, typingSpeed, typingSpeedVariance, typeInputController)
+
+                        // Read field content after operation for verification
+                        readFieldContent(typeInputController)
+                    } else {
+                        // Legacy fallback (API < 33): insert at offset via ACTION_SET_TEXT.
+                        // offset counts UTF-16 code units, consistent with the API 33+ path.
+                        fallbackTransformFocusedText(accessibilityServiceProvider) { current ->
+                            if (offset > current.length) {
+                                throw McpToolException.InvalidParams(
+                                    "offset ($offset) exceeds text length (${current.length}) in node '$nodeId'",
+                                )
+                            }
+                            current.substring(0, offset) + text + current.substring(offset)
+                        }
                     }
-
-                    // Position cursor at offset — check return value
-                    if (!typeInputController.setSelection(offset, offset)) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to position cursor at offset $offset " +
-                                "in node '$nodeId' — input connection lost",
-                        )
-                    }
-
-                    // Type code point by code point
-                    typeCharByChar(text, typingSpeed, typingSpeedVariance, typeInputController)
-
-                    // Read field content after operation for verification
-                    readFieldContent(typeInputController)
                 }
 
             Log.d(TAG, "type_insert_text: typed ${text.length} chars at offset $offset on '$nodeId'")
@@ -733,63 +811,76 @@ class TypeReplaceTextTool
                     val clickResult = actionExecutor.clickNode(nodeId, result.windows)
                     clickResult.onFailure { e -> mapNodeActionException(e, nodeId) }
 
-                    // Poll-retry for InputConnection readiness
-                    awaitInputConnectionReady(typeInputController, nodeId)
+                    if (isInputConnectionTypingSupported()) {
+                        // Poll-retry for InputConnection readiness
+                        awaitInputConnectionReady(typeInputController, nodeId)
 
-                    // Get current text and find the search string
-                    val surroundingText =
-                        typeInputController.getSurroundingText(
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            0,
-                        ) ?: throw McpToolException.ActionFailed(
-                            "Unable to read text from node '$nodeId'",
-                        )
+                        // Get current text and find the search string
+                        val surroundingText =
+                            typeInputController.getSurroundingText(
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                0,
+                            ) ?: throw McpToolException.ActionFailed(
+                                "Unable to read text from node '$nodeId'",
+                            )
 
-                    val fullText = surroundingText.text.toString()
-                    val searchIndex = fullText.indexOf(search)
-                    if (searchIndex == -1) {
-                        throw McpToolException.NodeNotFound(
-                            "Search text (${search.length} chars) not found in node '$nodeId'",
-                        )
+                        val fullText = surroundingText.text.toString()
+                        val searchIndex = fullText.indexOf(search)
+                        if (searchIndex == -1) {
+                            throw McpToolException.NodeNotFound(
+                                "Search text (${search.length} chars) not found in node '$nodeId'",
+                            )
+                        }
+
+                        // Adjust index relative to the actual field (account for surroundingText offset)
+                        val absoluteStart = surroundingText.offset + searchIndex
+                        val absoluteEnd = absoluteStart + search.length
+
+                        // Select the found text — check return value
+                        if (!typeInputController.setSelection(absoluteStart, absoluteEnd)) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to select text in node '$nodeId' — input connection lost",
+                            )
+                        }
+
+                        // Delete the selection via DELETE key event — check return values
+                        if (!typeInputController.sendKeyEvent(
+                                KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL),
+                            )
+                        ) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to send DELETE key (ACTION_DOWN) on node '$nodeId' — input connection lost",
+                            )
+                        }
+                        if (!typeInputController.sendKeyEvent(
+                                KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL),
+                            )
+                        ) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to send DELETE key (ACTION_UP) on node '$nodeId' — input connection lost",
+                            )
+                        }
+
+                        // Type replacement text code point by code point (if non-empty)
+                        if (newText.isNotEmpty()) {
+                            typeCharByChar(newText, typingSpeed, typingSpeedVariance, typeInputController)
+                        }
+
+                        // Read field content after operation for verification
+                        readFieldContent(typeInputController)
+                    } else {
+                        // Legacy fallback (API < 33): replace first occurrence via ACTION_SET_TEXT.
+                        fallbackTransformFocusedText(accessibilityServiceProvider) { current ->
+                            val idx = current.indexOf(search)
+                            if (idx == -1) {
+                                throw McpToolException.NodeNotFound(
+                                    "Search text (${search.length} chars) not found in node '$nodeId'",
+                                )
+                            }
+                            current.substring(0, idx) + newText + current.substring(idx + search.length)
+                        }
                     }
-
-                    // Adjust index relative to the actual field (account for surroundingText offset)
-                    val absoluteStart = surroundingText.offset + searchIndex
-                    val absoluteEnd = absoluteStart + search.length
-
-                    // Select the found text — check return value
-                    if (!typeInputController.setSelection(absoluteStart, absoluteEnd)) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to select text in node '$nodeId' — input connection lost",
-                        )
-                    }
-
-                    // Delete the selection via DELETE key event — check return values
-                    if (!typeInputController.sendKeyEvent(
-                            KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL),
-                        )
-                    ) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to send DELETE key (ACTION_DOWN) on node '$nodeId' — input connection lost",
-                        )
-                    }
-                    if (!typeInputController.sendKeyEvent(
-                            KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL),
-                        )
-                    ) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to send DELETE key (ACTION_UP) on node '$nodeId' — input connection lost",
-                        )
-                    }
-
-                    // Type replacement text code point by code point (if non-empty)
-                    if (newText.isNotEmpty()) {
-                        typeCharByChar(newText, typingSpeed, typingSpeedVariance, typeInputController)
-                    }
-
-                    // Read field content after operation for verification
-                    readFieldContent(typeInputController)
                 }
 
             Log.d(
@@ -912,51 +1003,56 @@ class TypeClearTextTool
                     val clickResult = actionExecutor.clickNode(nodeId, result.windows)
                     clickResult.onFailure { e -> mapNodeActionException(e, nodeId) }
 
-                    // Poll-retry for InputConnection readiness
-                    awaitInputConnectionReady(typeInputController, nodeId)
+                    if (isInputConnectionTypingSupported()) {
+                        // Poll-retry for InputConnection readiness
+                        awaitInputConnectionReady(typeInputController, nodeId)
 
-                    // Check if field has text — skip clear if already empty
-                    val surroundingText =
-                        typeInputController.getSurroundingText(
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            MAX_SURROUNDING_TEXT_LENGTH,
-                            0,
-                        )
-                    val textLength = surroundingText?.let { it.offset + it.text.length } ?: 0
-                    if (textLength == 0) {
-                        Log.d(TAG, "type_clear_text: field already empty on '$nodeId'")
-                        return McpToolUtils.untrustedTextResult(
-                            "Text cleared from node '$nodeId'.\nField content: ",
-                        )
-                    }
+                        // Check if field has text — skip clear if already empty
+                        val surroundingText =
+                            typeInputController.getSurroundingText(
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                MAX_SURROUNDING_TEXT_LENGTH,
+                                0,
+                            )
+                        val textLength = surroundingText?.let { it.offset + it.text.length } ?: 0
+                        if (textLength == 0) {
+                            Log.d(TAG, "type_clear_text: field already empty on '$nodeId'")
+                            return McpToolUtils.untrustedTextResult(
+                                "Text cleared from node '$nodeId'.\nField content: ",
+                            )
+                        }
 
-                    // Select all text — check return value
-                    if (!typeInputController.performContextMenuAction(android.R.id.selectAll)) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to select all text in node '$nodeId' — input connection lost",
-                        )
-                    }
+                        // Select all text — check return value
+                        if (!typeInputController.performContextMenuAction(android.R.id.selectAll)) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to select all text in node '$nodeId' — input connection lost",
+                            )
+                        }
 
-                    // Delete selection via DELETE key event — check return values
-                    if (!typeInputController.sendKeyEvent(
-                            KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL),
-                        )
-                    ) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to send DELETE key (ACTION_DOWN) on node '$nodeId' — input connection lost",
-                        )
-                    }
-                    if (!typeInputController.sendKeyEvent(
-                            KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL),
-                        )
-                    ) {
-                        throw McpToolException.ActionFailed(
-                            "Failed to send DELETE key (ACTION_UP) on node '$nodeId' — input connection lost",
-                        )
-                    }
+                        // Delete selection via DELETE key event — check return values
+                        if (!typeInputController.sendKeyEvent(
+                                KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL),
+                            )
+                        ) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to send DELETE key (ACTION_DOWN) on node '$nodeId' — input connection lost",
+                            )
+                        }
+                        if (!typeInputController.sendKeyEvent(
+                                KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL),
+                            )
+                        ) {
+                            throw McpToolException.ActionFailed(
+                                "Failed to send DELETE key (ACTION_UP) on node '$nodeId' — input connection lost",
+                            )
+                        }
 
-                    // Read field content after operation for verification
-                    readFieldContent(typeInputController)
+                        // Read field content after operation for verification
+                        readFieldContent(typeInputController)
+                    } else {
+                        // Legacy fallback (API < 33): clear via ACTION_SET_TEXT with empty string.
+                        fallbackTransformFocusedText(accessibilityServiceProvider) { "" }
+                    }
                 }
 
             Log.d(TAG, "type_clear_text: cleared text on node '$nodeId'")
@@ -1196,6 +1292,13 @@ fun registerTextInputTools(
     toolNamePrefix: String,
     perms: ToolPermissionsConfig,
 ) {
+    // The four type_* tools are registered on all supported API levels. Internally each
+    // execute() branches by SDK_INT: on API 33+ (Android 13) it uses the native
+    // AccessibilityService.InputMethod / getCurrentInputConnection() pipeline (natural
+    // character-by-character typing); on older devices (e.g. Android 11 / API 30, supported
+    // since minSdk was lowered to 30) onCreateInputMethod() is never invoked and
+    // inputMethodInstance stays null, so it falls back to legacy ACTION_SET_TEXT on the
+    // focused editable node. See typeTextWithFallback() below.
     if (perms.isToolEnabled(TypeAppendTextTool.TOOL_NAME)) {
         TypeAppendTextTool(
             treeParser,
