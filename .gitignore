@@ -2,6 +2,7 @@
 .gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
+soft/
 
 # Kotlin compiler caches (kotlin Gradle plugin, e.g. .kotlin/sessions)
 .kotlin/
