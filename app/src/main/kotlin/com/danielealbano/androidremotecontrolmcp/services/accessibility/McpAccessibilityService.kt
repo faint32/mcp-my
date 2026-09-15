@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -382,7 +383,9 @@ class McpAccessibilityService : AccessibilityService() {
      * clears the framework-side cache that backs [rootInActiveWindow]/[getWindows] traversal.
      */
     fun clearFrameworkNodeCache() {
-        clearCache()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            clearCache()
+        }
     }
 
     class McpInputMethod(
