@@ -56,7 +56,7 @@ fun ServerStatusCard(
             modifier = Modifier.padding(16.dp),
         ) {
             Text(
-                text = "Services Status",
+                text = stringResource(R.string.server_services_status),
                 style = MaterialTheme.typography.titleLarge,
             )
 
@@ -64,10 +64,10 @@ fun ServerStatusCard(
 
             // MCP Server row
             ServiceRow(
-                label = "MCP Server",
+                label = stringResource(R.string.server_mcp_server),
                 statusText = serverStatusToText(serverStatus),
                 statusColor = serverStatusToColor(serverStatus, isSystemInDarkTheme()),
-                buttonText = if (serverStatus is ServerStatus.Running) "Stop" else "Start",
+                buttonText = if (serverStatus is ServerStatus.Running) stringResource(R.string.server_button_stop) else stringResource(R.string.server_button_start),
                 buttonEnabled = mcpStartStopButtonEnabled(serverStatus, startEnabled),
                 onButtonClick = if (serverStatus is ServerStatus.Running) onMcpStopClick else onMcpStartClick,
             )
@@ -76,10 +76,10 @@ fun ServerStatusCard(
 
             // Event Channel row
             ServiceRow(
-                label = "Event Channel",
+                label = stringResource(R.string.server_event_channel),
                 statusText = channelStatusToText(channelStatus, channelEnabled),
                 statusColor = channelStatusToColor(channelStatus, channelEnabled, isSystemInDarkTheme()),
-                buttonText = if (channelEnabled) "Stop" else "Start",
+                buttonText = if (channelEnabled) stringResource(R.string.server_button_stop) else stringResource(R.string.server_button_start),
                 buttonEnabled = channelStartStopButtonEnabled(channelEnabled, startEnabled),
                 onButtonClick = if (channelEnabled) onChannelStopClick else onChannelStartClick,
             )
@@ -205,11 +205,11 @@ private fun channelStatusToText(
     enabled: Boolean,
 ): String =
     if (!enabled) {
-        "Stopped"
+        stringResource(R.string.channel_status_stopped)
     } else {
         when (status) {
-            is ChannelConnectionStatus.Idle -> "Idle"
-            is ChannelConnectionStatus.Active -> "Active"
+            is ChannelConnectionStatus.Idle -> stringResource(R.string.channel_status_idle)
+            is ChannelConnectionStatus.Active -> stringResource(R.string.channel_status_active)
             is ChannelConnectionStatus.Error -> status.message
         }
     }

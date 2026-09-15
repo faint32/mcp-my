@@ -376,4 +376,124 @@
     <string name="wifi_monitor_real_time">实时</string>
     <string name="wifi_monitor_notify_disconnected">断开时通知</string>
     <string name="wifi_monitor_scan_throttling_note">WiFi 扫描事件（发现/丢失）在后台可能延迟最多 30 分钟，这是由于 Android 的扫描限制。连接事件是实时的。</string>
+
+    <!-- Server Status Card -->
+    <string name="server_services_status">服务状态</string>
+    <string name="server_mcp_server">MCP 服务器</string>
+    <string name="server_event_channel">事件通道</string>
+    <string name="server_button_start">启动</string>
+    <string name="server_button_stop">停止</string>
+    <string name="channel_status_stopped">已停止</string>
+    <string name="channel_status_idle">空闲</string>
+    <string name="channel_status_active">活动中</string>
+
+    <!-- Settings - Event Channel Entry -->
+    <string name="settings_event_channel_title">事件通道</string>
+
+    <!-- MCP Tools Categories -->
+    <string name="mcp_tools_category_screen">屏幕</string>
+    <string name="mcp_tools_category_system">系统</string>
+    <string name="mcp_tools_category_touch">触摸</string>
+    <string name="mcp_tools_category_gestures">手势</string>
+    <string name="mcp_tools_category_node_actions">节点操作</string>
+    <string name="mcp_tools_category_text_input">文本输入</string>
+    <string name="mcp_tools_category_utility">实用工具</string>
+    <string name="mcp_tools_category_file_operations">文件操作</string>
+    <string name="mcp_tools_category_app_management">应用管理</string>
+    <string name="mcp_tools_category_camera">相机</string>
+    <string name="mcp_tools_category_intent">Intent</string>
+    <string name="mcp_tools_category_notifications">通知</string>
+    <string name="mcp_tools_category_location">位置</string>
+    <string name="mcp_tools_category_sharing">分享</string>
+
+    <!-- MCP Tools - Screen -->
+    <string name="mcp_tool_get_screen_state">获取屏幕状态</string>
+    <string name="mcp_tool_param_include_screenshot">包含截图</string>
+
+    <!-- MCP Tools - System -->
+    <string name="mcp_tool_press_back">按返回键</string>
+    <string name="mcp_tool_press_home">按主屏幕键</string>
+    <string name="mcp_tool_press_recents">按最近任务键</string>
+    <string name="mcp_tool_open_notifications">打开通知栏</string>
+    <string name="mcp_tool_open_quick_settings">打开快速设置</string>
+    <string name="mcp_tool_dismiss_keyboard">关闭键盘</string>
+
+    <!-- MCP Tools - Touch -->
+    <string name="mcp_tool_tap">点击</string>
+    <string name="mcp_tool_long_press">长按</string>
+    <string name="mcp_tool_double_tap">双击</string>
+    <string name="mcp_tool_swipe">滑动</string>
+    <string name="mcp_tool_scroll">滚动</string>
+
+    <!-- MCP Tools - Gestures -->
+    <string name="mcp_tool_pinch">捏合</string>
+    <string name="mcp_tool_custom_gesture">自定义手势</string>
+
+    <!-- MCP Tools - Node Actions -->
+    <string name="mcp_tool_find_nodes">查找节点</string>
+    <string name="mcp_tool_click_node">点击节点</string>
+    <string name="mcp_tool_long_click_node">长按节点</string>
+    <string name="mcp_tool_tap_node">轻触节点</string>
+    <string name="mcp_tool_scroll_to_node">滚动到节点</string>
+
+    <!-- MCP Tools - Text Input -->
+    <string name="mcp_tool_type_append_text">追加文本</string>
+    <string name="mcp_tool_type_insert_text">插入文本</string>
+    <string name="mcp_tool_type_replace_text">替换文本</string>
+    <string name="mcp_tool_type_clear_text">清除文本</string>
+    <string name="mcp_tool_press_key">按键</string>
+
+    <!-- MCP Tools - Utility -->
+    <string name="mcp_tool_get_clipboard">获取剪贴板</string>
+    <string name="mcp_tool_set_clipboard">设置剪贴板</string>
+    <string name="mcp_tool_wait_for_node">等待节点</string>
+    <string name="mcp_tool_wait_for_idle">等待空闲</string>
+    <string name="mcp_tool_get_node_details">获取节点详情</string>
+
+    <!-- MCP Tools - File Operations -->
+    <string name="mcp_tool_list_storage_locations">列出存储位置</string>
+    <string name="mcp_tool_list_files">列出文件</string>
+    <string name="mcp_tool_read_file">读取文件</string>
+    <string name="mcp_tool_write_file">写入文件</string>
+    <string name="mcp_tool_append_file">追加文件</string>
+    <string name="mcp_tool_file_replace">替换文件</string>
+    <string name="mcp_tool_download_from_url">从 URL 下载</string>
+    <string name="mcp_tool_delete_file">删除文件</string>
+
+    <!-- MCP Tools - App Management -->
+    <string name="mcp_tool_open_app">打开应用</string>
+    <string name="mcp_tool_list_apps">列出应用</string>
+    <string name="mcp_tool_close_app">关闭应用</string>
+
+    <!-- MCP Tools - Camera -->
+    <string name="mcp_tool_list_cameras">列出相机</string>
+    <string name="mcp_tool_list_camera_photo_resolutions">列出照片分辨率</string>
+    <string name="mcp_tool_list_camera_video_resolutions">列出视频分辨率</string>
+    <string name="mcp_tool_take_camera_photo">拍照</string>
+    <string name="mcp_tool_save_camera_photo">保存照片</string>
+    <string name="mcp_tool_save_camera_video">保存视频</string>
+    <string name="mcp_tool_param_audio">包含音频</string>
+
+    <!-- MCP Tools - Intent -->
+    <string name="mcp_tool_send_intent">发送 Intent</string>
+    <string name="mcp_tool_open_uri">打开 URI</string>
+
+    <!-- MCP Tools - Notifications -->
+    <string name="mcp_tool_notification_list">通知列表</string>
+    <string name="mcp_tool_notification_open">打开通知</string>
+    <string name="mcp_tool_notification_dismiss">关闭通知</string>
+    <string name="mcp_tool_notification_snooze">延后通知</string>
+    <string name="mcp_tool_notification_action">通知操作</string>
+    <string name="mcp_tool_notification_reply">回复通知</string>
+
+    <!-- MCP Tools - Location -->
+    <string name="mcp_tool_get_location">获取位置</string>
+    <string name="mcp_tool_param_fresh_fix">允许重新定位</string>
+
+    <!-- MCP Tools - Sharing -->
+    <string name="mcp_tool_get_shared_content">获取分享内容</string>
+    <string name="mcp_tool_share_file_via_web">通过网页分享文件</string>
+
+    <!-- MCP Tools Settings -->
+    <string name="mcp_tools_restart_note">更改将在服务器重启后生效</string>
 </resources>

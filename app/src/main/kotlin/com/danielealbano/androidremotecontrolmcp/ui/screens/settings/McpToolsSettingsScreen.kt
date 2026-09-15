@@ -60,148 +60,151 @@ private data class ToolCategory(
     val tools: List<ToolEntry>,
 )
 
-private val ALL_TOOL_CATEGORIES: List<ToolCategory> =
+@Composable
+private fun toolCategories(context: android.content.Context): List<ToolCategory> =
     listOf(
         ToolCategory(
-            "Screen",
+            context.getString(R.string.mcp_tools_category_screen),
             listOf(
                 ToolEntry(
                     "get_screen_state",
-                    "Get screen state",
-                    listOf(ParamEntry("include_screenshot", "Include screenshot")),
+                    context.getString(R.string.mcp_tool_get_screen_state),
+                    listOf(ParamEntry("include_screenshot", context.getString(R.string.mcp_tool_param_include_screenshot))),
                 ),
             ),
         ),
         ToolCategory(
-            "System",
+            context.getString(R.string.mcp_tools_category_system),
             listOf(
-                ToolEntry("press_back", "Press Back"),
-                ToolEntry("press_home", "Press Home"),
-                ToolEntry("press_recents", "Press Recents"),
-                ToolEntry("open_notifications", "Open Notifications"),
-                ToolEntry("open_quick_settings", "Open Quick Settings"),
-                ToolEntry("dismiss_keyboard", "Dismiss Keyboard"),
+                ToolEntry("press_back", context.getString(R.string.mcp_tool_press_back)),
+                ToolEntry("press_home", context.getString(R.string.mcp_tool_press_home)),
+                ToolEntry("press_recents", context.getString(R.string.mcp_tool_press_recents)),
+                ToolEntry("open_notifications", context.getString(R.string.mcp_tool_open_notifications)),
+                ToolEntry("open_quick_settings", context.getString(R.string.mcp_tool_open_quick_settings)),
+                ToolEntry("dismiss_keyboard", context.getString(R.string.mcp_tool_dismiss_keyboard)),
             ),
         ),
         ToolCategory(
-            "Touch",
+            context.getString(R.string.mcp_tools_category_touch),
             listOf(
-                ToolEntry("tap", "Tap"),
-                ToolEntry("long_press", "Long Press"),
-                ToolEntry("double_tap", "Double Tap"),
-                ToolEntry("swipe", "Swipe"),
-                ToolEntry("scroll", "Scroll"),
+                ToolEntry("tap", context.getString(R.string.mcp_tool_tap)),
+                ToolEntry("long_press", context.getString(R.string.mcp_tool_long_press)),
+                ToolEntry("double_tap", context.getString(R.string.mcp_tool_double_tap)),
+                ToolEntry("swipe", context.getString(R.string.mcp_tool_swipe)),
+                ToolEntry("scroll", context.getString(R.string.mcp_tool_scroll)),
             ),
         ),
         ToolCategory(
-            "Gestures",
+            context.getString(R.string.mcp_tools_category_gestures),
             listOf(
-                ToolEntry("pinch", "Pinch"),
-                ToolEntry("custom_gesture", "Custom Gesture"),
+                ToolEntry("pinch", context.getString(R.string.mcp_tool_pinch)),
+                ToolEntry("custom_gesture", context.getString(R.string.mcp_tool_custom_gesture)),
             ),
         ),
         ToolCategory(
-            "Node Actions",
+            context.getString(R.string.mcp_tools_category_node_actions),
             listOf(
-                ToolEntry("find_nodes", "Find Nodes"),
-                ToolEntry("click_node", "Click Node"),
-                ToolEntry("long_click_node", "Long Click Node"),
-                ToolEntry("tap_node", "Tap Node"),
-                ToolEntry("scroll_to_node", "Scroll to Node"),
+                ToolEntry("find_nodes", context.getString(R.string.mcp_tool_find_nodes)),
+                ToolEntry("click_node", context.getString(R.string.mcp_tool_click_node)),
+                ToolEntry("long_click_node", context.getString(R.string.mcp_tool_long_click_node)),
+                ToolEntry("tap_node", context.getString(R.string.mcp_tool_tap_node)),
+                ToolEntry("scroll_to_node", context.getString(R.string.mcp_tool_scroll_to_node)),
             ),
         ),
         ToolCategory(
-            "Text Input",
+            context.getString(R.string.mcp_tools_category_text_input),
             listOf(
-                ToolEntry("type_append_text", "Type Append Text"),
-                ToolEntry("type_insert_text", "Type Insert Text"),
-                ToolEntry("type_replace_text", "Type Replace Text"),
-                ToolEntry("type_clear_text", "Type Clear Text"),
-                ToolEntry("press_key", "Press Key"),
+                ToolEntry("type_append_text", context.getString(R.string.mcp_tool_type_append_text)),
+                ToolEntry("type_insert_text", context.getString(R.string.mcp_tool_type_insert_text)),
+                ToolEntry("type_replace_text", context.getString(R.string.mcp_tool_type_replace_text)),
+                ToolEntry("type_clear_text", context.getString(R.string.mcp_tool_type_clear_text)),
+                ToolEntry("press_key", context.getString(R.string.mcp_tool_press_key)),
             ),
         ),
         ToolCategory(
-            "Utility",
+            context.getString(R.string.mcp_tools_category_utility),
             listOf(
-                ToolEntry("get_clipboard", "Get Clipboard"),
-                ToolEntry("set_clipboard", "Set Clipboard"),
-                ToolEntry("wait_for_node", "Wait for Node"),
-                ToolEntry("wait_for_idle", "Wait for Idle"),
-                ToolEntry("get_node_details", "Get Node Details"),
+                ToolEntry("get_clipboard", context.getString(R.string.mcp_tool_get_clipboard)),
+                ToolEntry("set_clipboard", context.getString(R.string.mcp_tool_set_clipboard)),
+                ToolEntry("wait_for_node", context.getString(R.string.mcp_tool_wait_for_node)),
+                ToolEntry("wait_for_idle", context.getString(R.string.mcp_tool_wait_for_idle)),
+                ToolEntry("get_node_details", context.getString(R.string.mcp_tool_get_node_details)),
             ),
         ),
         ToolCategory(
-            "File Operations",
+            context.getString(R.string.mcp_tools_category_file_operations),
             listOf(
-                ToolEntry("list_storage_locations", "List Storage Locations"),
-                ToolEntry("list_files", "List Files"),
-                ToolEntry("read_file", "Read File"),
-                ToolEntry("write_file", "Write File"),
-                ToolEntry("append_file", "Append File"),
-                ToolEntry("file_replace", "File Replace"),
-                ToolEntry("download_from_url", "Download from URL"),
-                ToolEntry("delete_file", "Delete File"),
+                ToolEntry("list_storage_locations", context.getString(R.string.mcp_tool_list_storage_locations)),
+                ToolEntry("list_files", context.getString(R.string.mcp_tool_list_files)),
+                ToolEntry("read_file", context.getString(R.string.mcp_tool_read_file)),
+                ToolEntry("write_file", context.getString(R.string.mcp_tool_write_file)),
+                ToolEntry("append_file", context.getString(R.string.mcp_tool_append_file)),
+                ToolEntry("file_replace", context.getString(R.string.mcp_tool_file_replace)),
+                ToolEntry("download_from_url", context.getString(R.string.mcp_tool_download_from_url)),
+                ToolEntry("delete_file", context.getString(R.string.mcp_tool_delete_file)),
             ),
         ),
         ToolCategory(
-            "App Management",
+            context.getString(R.string.mcp_tools_category_app_management),
             listOf(
-                ToolEntry("open_app", "Open App"),
-                ToolEntry("list_apps", "List Apps"),
-                ToolEntry("close_app", "Close App"),
+                ToolEntry("open_app", context.getString(R.string.mcp_tool_open_app)),
+                ToolEntry("list_apps", context.getString(R.string.mcp_tool_list_apps)),
+                ToolEntry("close_app", context.getString(R.string.mcp_tool_close_app)),
             ),
         ),
         ToolCategory(
-            "Camera",
+            context.getString(R.string.mcp_tools_category_camera),
             listOf(
-                ToolEntry("list_cameras", "List Cameras"),
-                ToolEntry("list_camera_photo_resolutions", "List Camera Photo Resolutions"),
-                ToolEntry("list_camera_video_resolutions", "List Camera Video Resolutions"),
-                ToolEntry("take_camera_photo", "Take Camera Photo"),
-                ToolEntry("save_camera_photo", "Save Camera Photo"),
+                ToolEntry("list_cameras", context.getString(R.string.mcp_tool_list_cameras)),
+                ToolEntry("list_camera_photo_resolutions", context.getString(R.string.mcp_tool_list_camera_photo_resolutions)),
+                ToolEntry("list_camera_video_resolutions", context.getString(R.string.mcp_tool_list_camera_video_resolutions)),
+                ToolEntry("take_camera_photo", context.getString(R.string.mcp_tool_take_camera_photo)),
+                ToolEntry("save_camera_photo", context.getString(R.string.mcp_tool_save_camera_photo)),
                 ToolEntry(
                     "save_camera_video",
-                    "Save Camera Video",
-                    listOf(ParamEntry("audio", "Include audio")),
+                    context.getString(R.string.mcp_tool_save_camera_video),
+                    listOf(ParamEntry("audio", context.getString(R.string.mcp_tool_param_audio))),
                 ),
             ),
         ),
         ToolCategory(
-            "Intent",
+            context.getString(R.string.mcp_tools_category_intent),
             listOf(
-                ToolEntry("send_intent", "Send Intent"),
-                ToolEntry("open_uri", "Open URI"),
+                ToolEntry("send_intent", context.getString(R.string.mcp_tool_send_intent)),
+                ToolEntry("open_uri", context.getString(R.string.mcp_tool_open_uri)),
             ),
         ),
         ToolCategory(
-            "Notifications",
+            context.getString(R.string.mcp_tools_category_notifications),
             listOf(
-                ToolEntry("notification_list", "Notification List"),
-                ToolEntry("notification_open", "Notification Open"),
-                ToolEntry("notification_dismiss", "Notification Dismiss"),
-                ToolEntry("notification_snooze", "Notification Snooze"),
-                ToolEntry("notification_action", "Notification Action"),
-                ToolEntry("notification_reply", "Notification Reply"),
+                ToolEntry("notification_list", context.getString(R.string.mcp_tool_notification_list)),
+                ToolEntry("notification_open", context.getString(R.string.mcp_tool_notification_open)),
+                ToolEntry("notification_dismiss", context.getString(R.string.mcp_tool_notification_dismiss)),
+                ToolEntry("notification_snooze", context.getString(R.string.mcp_tool_notification_snooze)),
+                ToolEntry("notification_action", context.getString(R.string.mcp_tool_notification_action)),
+                ToolEntry("notification_reply", context.getString(R.string.mcp_tool_notification_reply)),
             ),
         ),
         ToolCategory(
-            "Location",
+            context.getString(R.string.mcp_tools_category_location),
             listOf(
                 ToolEntry(
                     "get_location",
-                    "Get Location",
-                    listOf(ParamEntry("fresh_fix", "Allow fresh GPS fix")),
+                    context.getString(R.string.mcp_tool_get_location),
+                    listOf(ParamEntry("fresh_fix", context.getString(R.string.mcp_tool_param_fresh_fix))),
                 ),
             ),
         ),
         ToolCategory(
-            "Sharing",
+            context.getString(R.string.mcp_tools_category_sharing),
             listOf(
-                ToolEntry("get_shared_content", "Get Shared Content"),
-                ToolEntry("share_file_via_web", "Share File via Web"),
+                ToolEntry("get_shared_content", context.getString(R.string.mcp_tool_get_shared_content)),
+                ToolEntry("share_file_via_web", context.getString(R.string.mcp_tool_share_file_via_web)),
             ),
         ),
     )
+
+private val ALL_TOOL_CATEGORIES: List<ToolCategory> = emptyList()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -212,6 +215,7 @@ fun McpToolsSettingsScreen(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val toolCategories = toolCategories(context)
     val lifecycleOwner = LocalLifecycleOwner.current
     val serverStatus by viewModel.serverStatus.collectAsStateWithLifecycle()
     val perms by viewModel.toolPermissionsConfig.collectAsStateWithLifecycle()
@@ -256,13 +260,13 @@ fun McpToolsSettingsScreen(
         LazyColumn(modifier = Modifier.weight(1f)) {
             item {
                 Text(
-                    text = "Changes take effect on server restart",
+                    text = stringResource(R.string.mcp_tools_restart_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 )
             }
-            ALL_TOOL_CATEGORIES.forEach { category ->
+            toolCategories.forEach { category ->
                 val categoryPermissions =
                     category.tools.mapNotNull { OptionalToolPermissions.permissionForTool(it.toolName) }.distinct()
                 item(key = "header_${category.header}") {

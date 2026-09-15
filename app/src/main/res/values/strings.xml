@@ -374,4 +374,124 @@
     <string name="wifi_monitor_scan_based">Scan-based, may be delayed</string>
     <string name="wifi_monitor_real_time">Real-time</string>
     <string name="wifi_monitor_scan_throttling_note">WiFi scan events (discovered/lost) may be delayed up to 30 minutes in background due to Android scan throttling. Connection events are real-time.</string>
+
+    <!-- Server Status Card -->
+    <string name="server_services_status">Services Status</string>
+    <string name="server_mcp_server">MCP Server</string>
+    <string name="server_event_channel">Event Channel</string>
+    <string name="server_button_start">Start</string>
+    <string name="server_button_stop">Stop</string>
+    <string name="channel_status_stopped">Stopped</string>
+    <string name="channel_status_idle">Idle</string>
+    <string name="channel_status_active">Active</string>
+
+    <!-- Settings - Event Channel Entry -->
+    <string name="settings_event_channel_title">Event Channel</string>
+
+    <!-- MCP Tools Categories -->
+    <string name="mcp_tools_category_screen">Screen</string>
+    <string name="mcp_tools_category_system">System</string>
+    <string name="mcp_tools_category_touch">Touch</string>
+    <string name="mcp_tools_category_gestures">Gestures</string>
+    <string name="mcp_tools_category_node_actions">Node Actions</string>
+    <string name="mcp_tools_category_text_input">Text Input</string>
+    <string name="mcp_tools_category_utility">Utility</string>
+    <string name="mcp_tools_category_file_operations">File Operations</string>
+    <string name="mcp_tools_category_app_management">App Management</string>
+    <string name="mcp_tools_category_camera">Camera</string>
+    <string name="mcp_tools_category_intent">Intent</string>
+    <string name="mcp_tools_category_notifications">Notifications</string>
+    <string name="mcp_tools_category_location">Location</string>
+    <string name="mcp_tools_category_sharing">Sharing</string>
+
+    <!-- MCP Tools - Screen -->
+    <string name="mcp_tool_get_screen_state">Get screen state</string>
+    <string name="mcp_tool_param_include_screenshot">Include screenshot</string>
+
+    <!-- MCP Tools - System -->
+    <string name="mcp_tool_press_back">Press Back</string>
+    <string name="mcp_tool_press_home">Press Home</string>
+    <string name="mcp_tool_press_recents">Press Recents</string>
+    <string name="mcp_tool_open_notifications">Open Notifications</string>
+    <string name="mcp_tool_open_quick_settings">Open Quick Settings</string>
+    <string name="mcp_tool_dismiss_keyboard">Dismiss Keyboard</string>
+
+    <!-- MCP Tools - Touch -->
+    <string name="mcp_tool_tap">Tap</string>
+    <string name="mcp_tool_long_press">Long Press</string>
+    <string name="mcp_tool_double_tap">Double Tap</string>
+    <string name="mcp_tool_swipe">Swipe</string>
+    <string name="mcp_tool_scroll">Scroll</string>
+
+    <!-- MCP Tools - Gestures -->
+    <string name="mcp_tool_pinch">Pinch</string>
+    <string name="mcp_tool_custom_gesture">Custom Gesture</string>
+
+    <!-- MCP Tools - Node Actions -->
+    <string name="mcp_tool_find_nodes">Find Nodes</string>
+    <string name="mcp_tool_click_node">Click Node</string>
+    <string name="mcp_tool_long_click_node">Long Click Node</string>
+    <string name="mcp_tool_tap_node">Tap Node</string>
+    <string name="mcp_tool_scroll_to_node">Scroll to Node</string>
+
+    <!-- MCP Tools - Text Input -->
+    <string name="mcp_tool_type_append_text">Type Append Text</string>
+    <string name="mcp_tool_type_insert_text">Type Insert Text</string>
+    <string name="mcp_tool_type_replace_text">Type Replace Text</string>
+    <string name="mcp_tool_type_clear_text">Type Clear Text</string>
+    <string name="mcp_tool_press_key">Press Key</string>
+
+    <!-- MCP Tools - Utility -->
+    <string name="mcp_tool_get_clipboard">Get Clipboard</string>
+    <string name="mcp_tool_set_clipboard">Set Clipboard</string>
+    <string name="mcp_tool_wait_for_node">Wait for Node</string>
+    <string name="mcp_tool_wait_for_idle">Wait for Idle</string>
+    <string name="mcp_tool_get_node_details">Get Node Details</string>
+
+    <!-- MCP Tools - File Operations -->
+    <string name="mcp_tool_list_storage_locations">List Storage Locations</string>
+    <string name="mcp_tool_list_files">List Files</string>
+    <string name="mcp_tool_read_file">Read File</string>
+    <string name="mcp_tool_write_file">Write File</string>
+    <string name="mcp_tool_append_file">Append File</string>
+    <string name="mcp_tool_file_replace">File Replace</string>
+    <string name="mcp_tool_download_from_url">Download from URL</string>
+    <string name="mcp_tool_delete_file">Delete File</string>
+
+    <!-- MCP Tools - App Management -->
+    <string name="mcp_tool_open_app">Open App</string>
+    <string name="mcp_tool_list_apps">List Apps</string>
+    <string name="mcp_tool_close_app">Close App</string>
+
+    <!-- MCP Tools - Camera -->
+    <string name="mcp_tool_list_cameras">List Cameras</string>
+    <string name="mcp_tool_list_camera_photo_resolutions">List Camera Photo Resolutions</string>
+    <string name="mcp_tool_list_camera_video_resolutions">List Camera Video Resolutions</string>
+    <string name="mcp_tool_take_camera_photo">Take Camera Photo</string>
+    <string name="mcp_tool_save_camera_photo">Save Camera Photo</string>
+    <string name="mcp_tool_save_camera_video">Save Camera Video</string>
+    <string name="mcp_tool_param_audio">Include audio</string>
+
+    <!-- MCP Tools - Intent -->
+    <string name="mcp_tool_send_intent">Send Intent</string>
+    <string name="mcp_tool_open_uri">Open URI</string>
+
+    <!-- MCP Tools - Notifications -->
+    <string name="mcp_tool_notification_list">Notification List</string>
+    <string name="mcp_tool_notification_open">Notification Open</string>
+    <string name="mcp_tool_notification_dismiss">Notification Dismiss</string>
+    <string name="mcp_tool_notification_snooze">Notification Snooze</string>
+    <string name="mcp_tool_notification_action">Notification Action</string>
+    <string name="mcp_tool_notification_reply">Notification Reply</string>
+
+    <!-- MCP Tools - Location -->
+    <string name="mcp_tool_get_location">Get Location</string>
+    <string name="mcp_tool_param_fresh_fix">Allow fresh GPS fix</string>
+
+    <!-- MCP Tools - Sharing -->
+    <string name="mcp_tool_get_shared_content">Get Shared Content</string>
+    <string name="mcp_tool_share_file_via_web">Share File via Web</string>
+
+    <!-- MCP Tools Settings -->
+    <string name="mcp_tools_restart_note">Changes take effect on server restart</string>
 </resources>
