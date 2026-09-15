@@ -339,4 +339,39 @@
     <string name="privacy_card_title">Worried about personal data?</string>
     <string name="privacy_card_action">Set up Privacy Mode</string>
     <string name="privacy_card_dismiss">Dismiss</string>
+
+    <!-- Event Channel Settings -->
+    <string name="event_channel_title">Event Channel</string>
+    <string name="event_channel_back">Back</string>
+    <string name="event_channel_endpoint_url">Endpoint URL</string>
+    <string name="event_channel_auth_token">Auth Token</string>
+    <string name="event_channel_token_hide">Hide</string>
+    <string name="event_channel_token_show">Show</string>
+    <string name="event_channel_token_copy">Copy</string>
+    <string name="event_channel_token_regenerate">Generate new</string>
+    <string name="event_channel_auto_start">Auto-start at boot</string>
+    <string name="event_channel_auto_start_supporting">Start event channel when device boots</string>
+    <string name="event_channel_event_sources">Event Sources</string>
+    <string name="event_channel_notification_events">Notification Events</string>
+    <string name="event_channel_wifi_events">WiFi Events</string>
+
+    <!-- Notification Filter -->
+    <string name="notification_filter_title">Notification Filter</string>
+    <string name="notification_filter_back">Back</string>
+    <string name="notification_filter_search_apps">Search apps</string>
+    <string name="notification_filter_apps_selected">%1$d apps selected</string>
+
+    <!-- WiFi Monitor -->
+    <string name="wifi_monitor_title">WiFi Monitor</string>
+    <string name="wifi_monitor_back">Back</string>
+    <string name="wifi_monitor_remove">Remove</string>
+    <string name="wifi_monitor_ssid">SSID</string>
+    <string name="wifi_monitor_add">Add</string>
+    <string name="wifi_monitor_notify_discovered">Notify on discovered</string>
+    <string name="wifi_monitor_notify_lost">Notify on lost</string>
+    <string name="wifi_monitor_notify_connected">Notify on connected</string>
+    <string name="wifi_monitor_notify_disconnected">Notify on disconnected</string>
+    <string name="wifi_monitor_scan_based">Scan-based, may be delayed</string>
+    <string name="wifi_monitor_real_time">Real-time</string>
+    <string name="wifi_monitor_scan_throttling_note">WiFi scan events (discovered/lost) may be delayed up to 30 minutes in background due to Android scan throttling. Connection events are real-time.</string>
 </resources>
