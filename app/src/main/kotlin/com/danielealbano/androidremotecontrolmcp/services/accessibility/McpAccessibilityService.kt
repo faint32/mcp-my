@@ -383,8 +383,6 @@ class McpAccessibilityService : AccessibilityService() {
      * clears the framework-side cache that backs [rootInActiveWindow]/[getWindows] traversal.
      */
     fun clearFrameworkNodeCache() {
-        // AccessibilityService.clearCache() only exists on API 34+ (UPSIDE_DOWN_CAKE).
-        // On older versions it's a no-op; the framework cache workaround simply isn't available.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             clearCache()
         }

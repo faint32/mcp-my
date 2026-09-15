@@ -1,8 +1,8 @@
 [versions]
 # Build tools
-agp = "8.3.0"
-kotlin = "1.9.24"  # 最后一个稳定的 1.9.x 版本
-ksp = "1.9.24-1.0.20"
+agp = "9.3.2"
+kotlin = "2.4.10"
+ksp = "2.3.11"
 
 # Compose
 compose-bom = "2026.08.00"
@@ -45,7 +45,7 @@ kotlinx-serialization = "1.11.0"
 kotlinx-coroutines = "1.11.0"
 
 # Dependency Injection
-hilt = "2.51.1"  # 兼容 AGP 8.3.0
+hilt = "2.60.1"
 hilt-navigation-compose = "1.4.0"
 androidx-hilt = "1.4.0"
 
@@ -206,6 +206,7 @@ javax-inject = { group = "javax.inject", name = "javax.inject", version = "1" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
