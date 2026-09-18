@@ -137,8 +137,13 @@ adb install android-remote-control-mcp-<version>-gms-release.apk
 ```bash
 git clone https://github.com/danielealbano/android-remote-control-mcp.git
 cd android-remote-control-mcp
+
+# Quick build (Makefile wrapper)
 make build
 make install  # installs on connected device/emulator
+
+# Or use Gradle directly (recommended for clean release builds)
+./gradlew clean assembleFossRelease --no-daemon
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full build requirements and instructions.

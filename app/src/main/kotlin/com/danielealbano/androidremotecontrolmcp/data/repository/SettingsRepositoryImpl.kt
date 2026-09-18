@@ -112,7 +112,7 @@ private fun mapPreferencesToServerConfig(prefs: Preferences): ServerConfig {
                 ?: BindingAddress.LOCALHOST,
         bearerToken = prefs[BEARER_TOKEN_KEY] ?: "",
         autoStartOnBoot = prefs[AUTO_START_KEY] ?: false,
-        toolCallIndicatorEnabled = prefs[TOOL_CALL_INDICATOR_ENABLED_KEY] ?: true,
+        toolCallIndicatorEnabled = prefs[TOOL_CALL_INDICATOR_ENABLED_KEY] ?: false,
         httpsEnabled = prefs[HTTPS_ENABLED_KEY] ?: false,
         certificateSource =
             CertificateSource.entries.firstOrNull { it.name == certificateSourceName }
@@ -143,7 +143,7 @@ private fun mapPreferencesToServerConfig(prefs: Preferences): ServerConfig {
         publicUrlOverride = prefs[PUBLIC_URL_OVERRIDE_KEY] ?: "",
         toolPermissionsConfig = ToolPermissionsConfig.fromJsonOrDefault(prefs[TOOL_PERMISSIONS_KEY]),
         privacyModeConfig = PrivacyModeConfig.fromJsonOrDefault(prefs[PRIVACY_MODE_CONFIG_KEY]),
-        hideFromRecents = prefs[HIDE_FROM_RECENTS_KEY] ?: false,
+        hideFromRecents = prefs[HIDE_FROM_RECENTS_KEY] ?: true,
     )
 }
 
