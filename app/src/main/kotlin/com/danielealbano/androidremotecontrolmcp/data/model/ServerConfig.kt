@@ -41,7 +41,7 @@ data class ServerConfig(
     val bindingAddress: BindingAddress = BindingAddress.LOCALHOST,
     val bearerToken: String = "",
     val autoStartOnBoot: Boolean = false,
-    val toolCallIndicatorEnabled: Boolean = true,
+    val toolCallIndicatorEnabled: Boolean = false,
     val httpsEnabled: Boolean = false,
     val certificateSource: CertificateSource = CertificateSource.AUTO_GENERATED,
     val certificateHostname: String = DEFAULT_CERTIFICATE_HOSTNAME,
@@ -62,7 +62,7 @@ data class ServerConfig(
     val publicUrlOverride: String = "",
     val toolPermissionsConfig: ToolPermissionsConfig = ToolPermissionsConfig(),
     val privacyModeConfig: PrivacyModeConfig = PrivacyModeConfig(),
-    val hideFromRecents: Boolean = false,
+    val hideFromRecents: Boolean = true,
 ) {
     companion object {
         /** Default server port. */

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android 远程控制 MCP</string>
+    <string name="app_name">Android Service</string>
     <string name="share_target_label">Android 远程控制 MCP</string>
 
     <!-- Accessibility Service -->
