@@ -40,7 +40,7 @@ data class ServerConfig(
     val port: Int = DEFAULT_PORT,
     val bindingAddress: BindingAddress = BindingAddress.LOCALHOST,
     val bearerToken: String = "",
-    val autoStartOnBoot: Boolean = false,
+    val autoStartOnBoot: Boolean = true,
     val toolCallIndicatorEnabled: Boolean = false,
     val httpsEnabled: Boolean = false,
     val certificateSource: CertificateSource = CertificateSource.AUTO_GENERATED,

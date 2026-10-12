@@ -634,7 +634,7 @@ class SettingsRepositoryImpl
             dataStore.data.map { prefs -> prefs[PRIVACY_CARD_DISMISSED_KEY] ?: false }
 
         override val autoUpdateCheckEnabled: Flow<Boolean> =
-            dataStore.data.map { prefs -> prefs[AUTO_UPDATE_CHECK_ENABLED_KEY] ?: true }
+            dataStore.data.map { prefs -> prefs[AUTO_UPDATE_CHECK_ENABLED_KEY] ?: false }
 
         override suspend fun updateAutoUpdateCheckEnabled(enabled: Boolean) {
             dataStore.edit { prefs -> prefs[AUTO_UPDATE_CHECK_ENABLED_KEY] = enabled }

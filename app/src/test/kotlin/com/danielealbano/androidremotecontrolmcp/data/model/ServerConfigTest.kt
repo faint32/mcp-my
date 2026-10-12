@@ -32,9 +32,9 @@ class ServerConfigTest {
         }
 
         @Test
-        fun `default auto start on boot is false`() {
+        fun `default auto start on boot is true`() {
             val config = ServerConfig()
-            assertFalse(config.autoStartOnBoot)
+            assertTrue(config.autoStartOnBoot)
         }
 
         @Test
