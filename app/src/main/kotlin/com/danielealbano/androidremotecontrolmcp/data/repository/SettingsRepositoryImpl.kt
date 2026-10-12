@@ -111,7 +111,7 @@ private fun mapPreferencesToServerConfig(prefs: Preferences): ServerConfig {
             BindingAddress.entries.firstOrNull { it.name == bindingAddressName }
                 ?: BindingAddress.LOCALHOST,
         bearerToken = prefs[BEARER_TOKEN_KEY] ?: "",
-        autoStartOnBoot = prefs[AUTO_START_KEY] ?: false,
+        autoStartOnBoot = prefs[AUTO_START_KEY] ?: true,
         toolCallIndicatorEnabled = prefs[TOOL_CALL_INDICATOR_ENABLED_KEY] ?: false,
         httpsEnabled = prefs[HTTPS_ENABLED_KEY] ?: false,
         certificateSource =
